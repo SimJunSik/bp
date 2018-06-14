@@ -12,7 +12,7 @@ test_label = np.load("test_label.npy")
 # hyper parameters
 learning_rate = 0.001
 
-width = 32
+width = 64
 height = width
 num_of_class = 2
 channel = 3

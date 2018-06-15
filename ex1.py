@@ -14,7 +14,7 @@ learning_rate = 0.001
 
 width = 64
 height = width
-num_of_class = 6
+num_of_class = 2
 channel = 3
 
 # input place holders
@@ -80,8 +80,8 @@ cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
     logits=logits, labels=Y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
-training_epochs = 100
-batch_size = 30
+training_epochs = 50
+batch_size = 40
 
 
 #save
@@ -107,7 +107,7 @@ for epoch in range(training_epochs):
         end = ((i + 1) * batch_size)
         batch_xs = train_input[start:end]
         batch_ys = train_label[start:end]
-        feed_dict = {X: batch_xs, Y: batch_ys, keep_prob : 0.8}
+        feed_dict = {X: batch_xs, Y: batch_ys, keep_prob : 0.7}
         c, _ = sess.run([cost, optimizer], feed_dict=feed_dict)
         avg_cost += c / total_batch
         #train_accuracy = accuracy.eval(feed_dict={X: batch_xs, Y: batch_ys, keep_prob : 1})

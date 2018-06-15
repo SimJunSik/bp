@@ -12,9 +12,9 @@ test_label = np.load("test_label.npy")
 # hyper parameters
 learning_rate = 0.001
 
-width = 32
+width = 64
 height = width
-num_of_class = 5
+num_of_class = 6
 channel = 3
 
 # input place holders
@@ -60,11 +60,18 @@ L5 = tf.nn.dropout(L5, keep_prob=keep_prob)
 
 
 L5_flat = tf.reshape(L5, [-1, (width//8) * (height//8) * 128])
-W6 = tf.get_variable("W6", shape=[(width//8) * (height//8) * 128, num_of_class], initializer=tf.contrib.layers.xavier_initializer())
+W6 = tf.get_variable("W6", shape=[(width//8) * (height//8) * 128, 384], initializer=tf.contrib.layers.xavier_initializer())
+b = tf.Variable(tf.random_normal([384]))
+L6 = tf.nn.relu(tf.matmul(L5_flat, W6) + b)
+L6_drop = tf.nn.dropout(L6, keep_prob)
+
+
+L6_flat = tf.reshape(L6, [-1, 384])
+W7 = tf.get_variable("W7", shape=[384, num_of_class], initializer=tf.contrib.layers.xavier_initializer())
 b = tf.Variable(tf.random_normal([num_of_class]))
 
 
-logits = tf.matmul(L5_flat,W6) + b
+logits = tf.matmul(L6_flat,W7) + b
 y_pred = tf.nn.softmax(logits)
 
 

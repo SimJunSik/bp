@@ -12,9 +12,9 @@ test_label = np.load("test_label.npy")
 # hyper parameters
 learning_rate = 0.001
 
-width = 64
+width = 32
 height = width
-num_of_class = 2
+num_of_class = 5
 channel = 3
 
 # input place holders
@@ -74,7 +74,7 @@ cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 training_epochs = 50
-batch_size = 50
+batch_size = 30
 
 
 #save

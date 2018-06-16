@@ -15,7 +15,7 @@ learning_rate = 0.001
 width = 64
 height = width
 num_of_class = 2
-channel = 3
+channel = 1
 
 # input place holders
 X = tf.placeholder(tf.float32, shape = [None, width*height*channel])

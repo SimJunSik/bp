@@ -107,7 +107,7 @@ for epoch in range(training_epochs):
         end = ((i + 1) * batch_size)
         batch_xs = train_input[start:end]
         batch_ys = train_label[start:end]
-        feed_dict = {X: batch_xs, Y: batch_ys, keep_prob : 0.9}
+        feed_dict = {X: batch_xs, Y: batch_ys, keep_prob : 0.7}
         c, _ = sess.run([cost, optimizer], feed_dict=feed_dict)
         avg_cost += c / total_batch
         #train_accuracy = accuracy.eval(feed_dict={X: batch_xs, Y: batch_ys, keep_prob : 1})

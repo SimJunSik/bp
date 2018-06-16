@@ -58,20 +58,26 @@ L5 = tf.nn.relu(L5)
 L5 = tf.nn.dropout(L5, keep_prob=keep_prob)
 
 
+W6 = tf.Variable(tf.random_normal([3, 3, 128, 256], stddev=5e-2))
+L6 = tf.nn.conv2d(L5, W6, strides=[1, 1, 1, 1], padding='SAME')
+L6 = tf.nn.relu(L6)
+L6 = tf.nn.dropout(L6, keep_prob=keep_prob)
 
-L5_flat = tf.reshape(L5, [-1, (width//8) * (height//8) * 128])
-W6 = tf.get_variable("W6", shape=[(width//8) * (height//8) * 128, 384], initializer=tf.contrib.layers.xavier_initializer())
+
+
+L6_flat = tf.reshape(L6, [-1, (width//8) * (height//8) * 256])
+W7 = tf.get_variable("W7", shape=[(width//8) * (height//8) * 256, 384], initializer=tf.contrib.layers.xavier_initializer())
 b = tf.Variable(tf.random_normal([384]))
-L6 = tf.nn.relu(tf.matmul(L5_flat, W6) + b)
-L6_drop = tf.nn.dropout(L6, keep_prob)
+L7 = tf.nn.relu(tf.matmul(L6_flat, W7) + b)
+L7_drop = tf.nn.dropout(L7, keep_prob)
 
 
-L6_flat = tf.reshape(L6, [-1, 384])
-W7 = tf.get_variable("W7", shape=[384, num_of_class], initializer=tf.contrib.layers.xavier_initializer())
+L7_flat = tf.reshape(L7, [-1, 384])
+W8 = tf.get_variable("W8", shape=[384, num_of_class], initializer=tf.contrib.layers.xavier_initializer())
 b = tf.Variable(tf.random_normal([num_of_class]))
 
 
-logits = tf.matmul(L6_flat,W7) + b
+logits = tf.matmul(L7_flat,W8) + b
 y_pred = tf.nn.softmax(logits)
 
 
@@ -80,7 +86,7 @@ cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
     logits=logits, labels=Y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
-training_epochs = 50
+training_epochs = 60
 batch_size = 40
 
 
@@ -107,7 +113,7 @@ for epoch in range(training_epochs):
         end = ((i + 1) * batch_size)
         batch_xs = train_input[start:end]
         batch_ys = train_label[start:end]
-        feed_dict = {X: batch_xs, Y: batch_ys, keep_prob : 0.7}
+        feed_dict = {X: batch_xs, Y: batch_ys, keep_prob : 0.8}
         c, _ = sess.run([cost, optimizer], feed_dict=feed_dict)
         avg_cost += c / total_batch
         #train_accuracy = accuracy.eval(feed_dict={X: batch_xs, Y: batch_ys, keep_prob : 1})
